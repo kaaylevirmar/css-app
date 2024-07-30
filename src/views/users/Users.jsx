@@ -19,7 +19,6 @@ const Users = () => {
     const deleteUser = async (id) => {
         await axios.delete(`http://localhost:3001/user/${id}/delete`)
             .then((res) => {
-                console.log(res.data);
                 setDeletedUser(res.data);
             })
     }
@@ -56,7 +55,6 @@ const Users = () => {
                 </thead>
                 <tbody>
                     {users.map((user, key) => {
-                        console.log(user._id);
                         return (
                             <tr key={key} className='border-b border-slate-300'>
                                 <td className='py-5'>{user.firstName} {user.lastName}</td>
