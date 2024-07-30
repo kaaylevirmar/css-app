@@ -25,8 +25,43 @@ const Users = () => {
     }
 
     return (
-        <div className='text-3xl font-bold underline'>
-            Hello World
+        <div className='w-4/5 m-10 flex i relative overflow-x-auto shadow-md sm:rounded-lg'>
+            <table className="w-full text-md text-left rtl:text-right m-5">
+                <thead>
+                    <tr className='border-b-2 border-slate-500'>
+                        <th className='py-5 w-72'>
+                            Name
+                        </th >
+                        <th className='py-5 w-72'>
+                            Email
+                        </th>
+                        <th className='py-5 w-72'>
+                            Role
+                        </th>
+                        <th className='py-5 w-72'>
+                            Username
+                        </th>
+                        <th className='py-5 w-72'>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {users.map((user, key) => {
+                        return (
+                            <tr key={key} className='border-b border-slate-300'>
+                                <td className='py-5'>{user.firstName} {user.lastName}</td>
+                                <td className='py-5'>{user.email}</td>
+                                <td className='py-5'>Admin</td>
+                                <td className='py-5'>{user.username}</td>
+                                <td className='py-5'>1961</td>
+                            </tr>
+
+                        );
+                    })}
+
+                </tbody>
+            </table>
         </div>
     )
 }
