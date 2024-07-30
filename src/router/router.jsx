@@ -15,7 +15,7 @@ function MainRouter() {
                     <Route index path="/users" element={<Users />} />
                     <Route index path="/user-create" element={<CreateUser />} />
                     <Route index path="/user/:id" element={<ShowUser />} />
-                    <Route index path="/user/:id/update" element={<EditUser />} />
+                    <Route index path="/user/:id/edit" element={<EditUser />} />
                 </Route>
             </Routes>
         </React.Fragment>

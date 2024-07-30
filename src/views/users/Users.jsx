@@ -25,8 +25,16 @@ const Users = () => {
     }
 
     return (
-        <div className='w-4/5 m-10 flex i relative overflow-x-auto shadow-md sm:rounded-lg'>
-            <table className="w-full text-md text-left rtl:text-right m-5">
+        <div className='w-11/12 m-10 h-auto flex i flex-col relative overflow-x-auto shadow-md sm:rounded-lg'>
+            <div className='flex justify-between p-5'>
+                <div>
+                    <h1><b>User</b></h1>
+                    <p>A list of all the users in your account including their name, title, email and role.</p>
+                </div>
+                <div><button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'><Link to='/user-create'>Add User</Link></button></div>
+
+            </div>
+            <table className="w-full h-4/5 text-md text-left rtl:text-right mx-5">
                 <thead>
                     <tr className='border-b-2 border-slate-500'>
                         <th className='py-5 w-72'>
@@ -48,18 +56,23 @@ const Users = () => {
                 </thead>
                 <tbody>
                     {users.map((user, key) => {
+                        console.log(user._id);
                         return (
                             <tr key={key} className='border-b border-slate-300'>
                                 <td className='py-5'>{user.firstName} {user.lastName}</td>
                                 <td className='py-5'>{user.email}</td>
                                 <td className='py-5'>Admin</td>
                                 <td className='py-5'>{user.username}</td>
-                                <td className='py-5'>1961</td>
+                                <td className='py-5 flex gap-1'>
+                                    <div><button className='bg-blue-500 hover:bg-blue-800 text-white py-1 px-2 rounded'><Link to={`/user/${user._id}`}>View</Link></button></div>
+                                    <div><button className='bg-blue-500 hover:bg-blue-800 text-white py-1 px-2 rounded'><Link to={`/user/${user._id}/edit`}>Edit</Link></button></div>
+                                    <div><button className='bg-red-500 hover:bg-red-800 text-white py-1 px-2 rounded' onClick={() => {
+                                        deleteUser(user._id)
+                                    }}>Delete</button></div>
+                                </td>
                             </tr>
-
                         );
                     })}
-
                 </tbody>
             </table>
         </div>
