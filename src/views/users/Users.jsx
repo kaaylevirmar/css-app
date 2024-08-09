@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 const Users = () => {
     const [users, setUsers] = useState([]);
     const [deletedUser, setDeletedUser] = useState([]);
+    const PORT = import.meta.env.VITE_PORT;
+    const baseUrl = import.meta.env.VITE_APP_URL;
 
     useEffect(() => {
-        axios.get('http://localhost:3001/users')
+        axios.get(`${baseUrl}:${PORT}/users`)
             .then((res) => {
                 setUsers(res.data);
             })
@@ -17,7 +19,7 @@ const Users = () => {
     }, [deletedUser])
 
     const deleteUser = async (id) => {
-        await axios.delete(`http://localhost:3001/user/${id}/delete`)
+        await axios.delete(`${baseUrl}:${PORT}/user/${id}/delete`)
             .then((res) => {
                 setDeletedUser(res.data);
             })

@@ -7,6 +7,8 @@ const CreateUser = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const PORT = import.meta.env.VITE_PORT;
+    const baseUrl = import.meta.env.VITE_APP_URL;
 
     const fnameHandleChange = (event) => {
         setFname(event.target.value);
@@ -37,7 +39,7 @@ const CreateUser = () => {
             password: password
         }
 
-        await axios.post('http://localhost:3001/user-create', formData,
+        await axios.post(`${baseUrl}:${PORT}/user-create`, formData,
             {
                 'Content-Type': 'application/json',
             }

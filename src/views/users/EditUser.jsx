@@ -9,6 +9,8 @@ const EditUser = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const PORT = import.meta.env.VITE_PORT;
+    const baseUrl = import.meta.env.VITE_APP_URL;
 
     const fnameHandleChange = (event) => {
         setFname(event.target.value);
@@ -55,7 +57,7 @@ const EditUser = () => {
             password: password
         }
 
-        await axios.put(`http://localhost:3001/user/${id}/update`, formData,
+        await axios.put(`${baseUrl}:${PORT}/user/${id}/update`, formData,
             {
                 'Content-Type': 'application/json',
             }
