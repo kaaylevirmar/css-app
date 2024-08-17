@@ -3,9 +3,9 @@ import Navbar from './components/Navbar'
 import { Outlet } from "react-router-dom"
 
 function App() {
-
+    //tempo
   return (
-    <div className='flex h-screen '>
+    <div className='flex h-screen '>s
       <div className='w-64 fixed h-full'>
         <Navbar />
       </div>
