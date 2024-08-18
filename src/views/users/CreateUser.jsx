@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react';
+import axios from 'axios';
+import {useOutletContext} from 'react-router-dom';
 
 const CreateUser = () => {
+    const { showFlashMessage }  = useOutletContext();
+
     const [fname, setFname] = useState('');
     const [lname, setlname] = useState('');
     const [email, setEmail] = useState('');
@@ -31,6 +34,8 @@ const CreateUser = () => {
     };
 
     const addUser = async () => {
+        event.preventDefault();
+
         const formData = {
             firstName: fname,
             lastName: lname,
@@ -43,7 +48,13 @@ const CreateUser = () => {
             {
                 'Content-Type': 'application/json',
             }
-        )
+        ).then((res)=>{
+            const { message, type } = res.data;
+            showFlashMessage(message,type);
+
+        }).catch((err)=>{
+            console.log(err);
+        })
     }
 
     return (

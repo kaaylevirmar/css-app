@@ -1,8 +1,19 @@
-import './App.css'
-import Navbar from './components/Navbar'
-import { Outlet } from "react-router-dom"
+import './App.css';
+import Navbar from './components/Navbar';
+import { Outlet } from "react-router-dom";
+import FlashMessage from './components/FlashMessage';
+import { useState } from 'react';
 
 function App() {
+const [flashMessage, setFlashMessage] = useState({message: '', type: ''});
+
+const showFlashMessage = (message, type) => {
+  setFlashMessage({message,type})
+
+  setTimeout(()=>{
+    setFlashMessage('');
+  },3000)
+}
 
   return (
     <div className='flex h-screen '>
@@ -10,7 +21,8 @@ function App() {
         <Navbar />
       </div>
       <div className='flex-1 ml-72 overflow-x-auto'>
-        <Outlet />
+        <FlashMessage flashMessage={flashMessage}/>
+        <Outlet context={{showFlashMessage}} />
       </div>
     </div>
   )
