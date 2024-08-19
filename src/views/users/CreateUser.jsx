@@ -1,62 +1,48 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {useOutletContext} from 'react-router-dom';
+import { useFormik } from 'formik';
+import { useNavigate } from "react-router-dom";
 
 const CreateUser = () => {
-    const { showFlashMessage }  = useOutletContext();
-
-    const [fname, setFname] = useState('');
-    const [lname, setlname] = useState('');
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const PORT = import.meta.env.VITE_PORT;
     const baseUrl = import.meta.env.VITE_APP_URL;
+    const navigate = useNavigate();
+    const [errorMessages, setErrorMessage] = useState([]);
+    const { showFlashMessage }  = useOutletContext();
 
-    const fnameHandleChange = (event) => {
-        setFname(event.target.value);
-    };
-
-    const lnameHandleChange = (event) => {
-        setlname(event.target.value);
-    };
-
-    const emailHandleChange = (event) => {
-        setEmail(event.target.value);
-    };
-
-    const usernameHandleChange = (event) => {
-        setUsername(event.target.value);
-    };
-
-    const passwordHandleChange = (event) => {
-        setPassword(event.target.value);
-    };
-
-    const addUser = async () => {
-        event.preventDefault();
-
-        const formData = {
-            firstName: fname,
-            lastName: lname,
-            email: email,
-            username: username,
-            password: password
+    const formik = useFormik({
+        initialValues:{
+            firstName: '',
+            lastName: '',
+            email: '',
+            username: '',
+            password: ''
+        },
+        onSubmit: (values) => {
+            axios.post(`${baseUrl}:${PORT}/user-create`, values,
+                {
+                    'Content-Type': 'application/json',
+                }
+            ).then((res)=>{
+                const { message, type } = res.data;
+                showFlashMessage(message,type);
+                navigate('/users');
+    
+            }).catch((err)=>{
+                console.log(err);
+                setErrorMessage(err.response.data.errors);
+            })
         }
+        
+    });
 
-        await axios.post(`${baseUrl}:${PORT}/user-create`, formData,
-            {
-                'Content-Type': 'application/json',
-            }
-        ).then((res)=>{
-            const { message, type } = res.data;
-            showFlashMessage(message,type);
-
-        }).catch((err)=>{
-            const {message, type} = err.response.data;
-            showFlashMessage(message,type);
+    const getErrorMessage = (value) => {
+        const error = errorMessages.filter((error)=>{
+            return error.path[0] === value;
         })
-    }
+        return error;
+    } 
 
     return (
         <div className='w-full flex justify-start'>
@@ -65,26 +51,44 @@ const CreateUser = () => {
                 <h1 className='font-bold text-4xl tracking-wide'>Create User Account</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                 </div>
-            <form className='w-11/12' onSubmit={() => {addUser();}} >
+            <form className='w-11/12' onSubmit={formik.handleSubmit}>
                 <div className='flex mb-6 w-full gap-5'>
                 <div className='w-full'>
-                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="fname">First Name:</label>
-                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='fname' type="text" value={fname} onChange={(event) => {fnameHandleChange(event);}} />
+                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="firstName">First Name:</label>
+                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='firstName' type="text" value={formik.values.firstName} onChange={formik.handleChange} />
+                    {errorMessages && getErrorMessage('firstName').map((value,key)=>{
+                        return(<div key={key} className='text-red-600 text-sm'>{ value.message }</div>);
+                    })}
                 </div>
                 <div className='w-full'>
-                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="lname">Last Name:</label>
-                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='lname' type="text" value={lname} onChange={(event) => {lnameHandleChange(event);}} />
+                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="lastName">Last Name:</label>
+                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='lastName' type="text" value={formik.values.lastName} onChange={formik.handleChange} />
+                    {errorMessages && getErrorMessage('lastName').map((value,key)=>{
+                        return(<div key={key} className='text-red-600 text-sm'>{ value.message }</div>);
+                    })}
                 </div>
                 </div>
                 <div className='mb-6'>
                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="email">Email:</label>
-                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='email' type="text" value={email} onChange={(event) => {emailHandleChange(event);}} /></div>
+                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='email' type="email" value={formik.values.email} onChange={formik.handleChange} />
+                    {errorMessages && getErrorMessage('email').map((value,key)=>{
+                        return(<div key={key} className='text-red-600 text-sm'>{ value.message }</div>);
+                    })}
+                </div>
                 <div className='mb-6'>
                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="username">Username: </label>
-                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='username' type="text" value={username} onChange={(event) => {usernameHandleChange(event);}} /></div>
+                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='username' type="text" value={formik.values.username} onChange={formik.handleChange} />
+                    {errorMessages && getErrorMessage('username').map((value,key)=>{
+                        return(<div key={key} className='text-red-600 text-sm'>{ value.message }</div>);
+                    })}    
+                </div>
                 <div className='mb-6'>
                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="password">Password:</label>
-                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='password' type="password" value={password} onChange={(event) => {passwordHandleChange(event);}} /></div>
+                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='password' type="password" value={formik.values.password} onChange={formik.handleChange} />
+                    {errorMessages && getErrorMessage('password').map((value,key)=>{
+                        return(<div key={key} className='text-red-600 text-sm'>{ value.message }</div>);
+                    })}
+                </div>
                 <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' type='submit'>Submit</button>
             </form>
         </div>
