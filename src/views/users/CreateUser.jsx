@@ -11,13 +11,20 @@ const CreateUser = () => {
     const [errorMessages, setErrorMessage] = useState([]);
     const { showFlashMessage }  = useOutletContext();
 
+    const roles = [
+        { value: 'staff', option: 'Staff'},
+        { value: 'admin', option: 'Admin'},
+        { value: 'priest', option: 'Priest'}
+    ]
+
     const formik = useFormik({
         initialValues:{
             firstName: '',
             lastName: '',
             email: '',
             username: '',
-            password: ''
+            password: '',
+            role: ''
         },
         onSubmit: (values) => {
             axios.post(`${baseUrl}:${PORT}/user-create`, values,
@@ -85,6 +92,18 @@ const CreateUser = () => {
                 <div className='mb-6'>
                     <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="password">Password:</label>
                     <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='password' type="password" value={formik.values.password} onChange={formik.handleChange} />
+                    {errorMessages && getErrorMessage('password').map((value,key)=>{
+                        return(<div key={key} className='text-red-600 text-sm'>{ value.message }</div>);
+                    })}
+                </div>
+                <div className='mb-6'>
+                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="role">Role:</label>
+                    <select className='w-1/2 p-2 rounded border  border-gray-700' name="role" id="role" value={formik.values.role} onChange={formik.handleChange}>
+                        <option selected={true} value="" disabled>-</option>
+                    {roles.map((role,index)=>{
+                        return <option key={index} value={role.value}>{role.option}</option>
+                    })}
+                    </select>
                     {errorMessages && getErrorMessage('password').map((value,key)=>{
                         return(<div key={key} className='text-red-600 text-sm'>{ value.message }</div>);
                     })}

@@ -61,7 +61,7 @@ const Users = () => {
                             <tr key={key} className='border-b border-slate-300'>
                                 <td className='py-5'>{user.firstName} {user.lastName}</td>
                                 <td className='py-5'>{user.email}</td>
-                                <td className='py-5'>Admin</td>
+                                <td className='py-5'>{user.role}</td>
                                 <td className='py-5'>{user.username}</td>
                                 <td className='py-5 flex gap-1'>
                                     <div><button className='bg-blue-500 hover:bg-blue-800 text-white py-1 px-2 rounded'><Link to={`/user/${user._id}`}>View</Link></button></div>
