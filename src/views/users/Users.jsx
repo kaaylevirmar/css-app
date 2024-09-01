@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import { Link } from 'react-router-dom';
+import { useFormik } from 'formik';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -8,15 +9,33 @@ const Users = () => {
     const PORT = import.meta.env.VITE_PORT;
     const baseUrl = import.meta.env.VITE_APP_URL;
 
+    const roles = [
+        { value: 'staff', option: 'Staff'},
+        { value: 'admin', option: 'Admin'},
+        { value: 'priest', option: 'Priest'}
+    ]
+
+    const formik = useFormik({
+        initialValues: {
+            name: '', 
+            role: ''
+        }
+    })
+
     useEffect(() => {
-        axios.get(`${baseUrl}:${PORT}/users`)
+        axios.get(`${baseUrl}:${PORT}/users`,{
+            params: {
+                name: formik.values.name,
+                role: formik.values.role
+            }
+        })
             .then((res) => {
                 setUsers(res.data);
             })
             .catch((e) => {
                 console.log(e);
             })
-    }, [deletedUser])
+    }, [deletedUser, formik.values.name, formik.values.role])
 
     const deleteUser = async (id) => {
         await axios.delete(`${baseUrl}:${PORT}/user/${id}/delete`)
@@ -27,13 +46,28 @@ const Users = () => {
 
     return (
         <div className='w-11/12 m-10 h-auto flex i flex-col relative overflow-x-auto shadow-md sm:rounded-lg'>
-            <div className='flex justify-between p-5'>
-                <div>
-                    <h1><b>User</b></h1>
-                    <p>A list of all the users in your account including their name, title, email and role.</p>
+            <div className=' justify-between p-5'>
+                <h1><b>User</b></h1>
+                <p>A list of all the users in your account including their name, title, email and role.</p>
+            </div>
+            <div className='w-full flex justify-between items-center p-2'>
+                <div className='flex gap-3 w-9/12'>                
+                    <div className='w-1/4' >
+                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="name">Search:</label>
+                    <input className='border p-2 rounded-md border-gray-500 focus:outline-none focus:ring-2 w-full' id='name' type="text" value={formik.values.name} onChange={formik.handleChange} />
                 </div>
-                <div><button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'><Link to='/user-create'>Add User</Link></button></div>
-
+                <div className='w-1/4'>
+                    <label className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2' htmlFor="role">Role:</label>
+                    <select className='p-2 rounded border  border-gray-700' name="role" id="role" value={formik.values.role} onChange={formik.handleChange}>
+                        <option value="">-</option>
+                    {roles.map((role,index)=>{
+                        return <option key={index} value={role.value}>{role.option}</option>
+                    })}
+                    </select>
+                </div></div>
+                <div>
+                    <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'><Link to='/user-create'>Add User</Link></button>
+                </div>
             </div>
             <table className="w-full h-4/5 text-md text-left rtl:text-right mx-5">
                 <thead>
