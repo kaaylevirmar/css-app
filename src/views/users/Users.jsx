@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
+import {useOutletContext} from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 
@@ -8,6 +9,7 @@ const Users = () => {
     const [deletedUser, setDeletedUser] = useState([]);
     const PORT = import.meta.env.VITE_PORT;
     const baseUrl = import.meta.env.VITE_APP_URL;
+    const { showFlashMessage, token }  = useOutletContext();
 
     const roles = [
         { value: 'staff', option: 'Staff'},
@@ -25,7 +27,7 @@ const Users = () => {
     useEffect(() => {
         axios.get(`${baseUrl}:${PORT}/users`,{
             headers: {
-                Authentication: localStorage.getItem('token')
+                Authorization: token,
             },
             params: {
                 name: formik.values.name,
@@ -47,7 +49,7 @@ const Users = () => {
             })
     }
 
-    return (
+    return ( 
         <div className='w-11/12 m-10 h-auto flex i flex-col relative overflow-x-auto shadow-md sm:rounded-lg'>
             <div className=' justify-between p-5'>
                 <h1><b>User</b></h1>

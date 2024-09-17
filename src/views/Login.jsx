@@ -1,38 +1,41 @@
 import React from "react";
 import { useFormik } from 'formik';
-import { useNavigate, useOutletContext } from "react-router-dom";
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';  
+import { UserLoginValidation } from "../middlewares/validation";
 
 const Login = () => {
   const PORT = import.meta.env.VITE_PORT;
   const baseUrl = import.meta.env.VITE_APP_URL;
   const navigate = useNavigate();
-  // const { showFlashMessage }  = useOutletContext();
 
   const formik = useFormik({
     initialValues: {
       username: '',
       password: ''
     },
+    validationSchema: UserLoginValidation,
     onSubmit: (values) => {
       axios.post(`${baseUrl}:${PORT}/login`, values,
         {   
             'Content-Type': 'application/json',
         }
     ).then((res)=>{ 
-        console.log(res);
-        const { token } = res.data; 
+        const { token, role } = res.data; 
         localStorage.setItem('token', token);
-        navigate('/users');
+        localStorage.setItem('role', role);
+        
+        if(token){
+          navigate('/dashboard');
+        }
         
     }).catch((err)=>{
-        // const {message, type} = err.response.data;
-        // showFlashMessage(message,type); 
+      console.log(err);
     })
     }
   });
 
-  return (
+  return ( 
     <div className="w-full flex justify-center h-screen bg-slate-700">
       <div className=" border w-2/6 p-10 m-32 h-2/4 shadow-lg bg-white rounded ">
         <div className="w-full flex flex-col justify-center items-center text-center mb-10 gap-2">

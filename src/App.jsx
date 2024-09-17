@@ -6,6 +6,8 @@ import { useState } from 'react';
 
 function App() {
 const [flashMessage, setFlashMessage] = useState({message: '', type: ''});
+const [token, setToken] = useState(localStorage.getItem('token') || '')
+
 
 const showFlashMessage = (message, type) => {
   setFlashMessage({message,type})
@@ -22,7 +24,7 @@ const showFlashMessage = (message, type) => {
       </div>
       <div className='flex-1 ml-72 overflow-x-auto'>
         <FlashMessage flashMessage={flashMessage}/>
-        <Outlet context={{showFlashMessage}} />
+        <Outlet context={{showFlashMessage, token}} />
       </div>
     </div>
   )

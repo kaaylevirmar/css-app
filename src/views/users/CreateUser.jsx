@@ -9,8 +9,7 @@ const CreateUser = () => {
     const PORT = import.meta.env.VITE_PORT;
     const baseUrl = import.meta.env.VITE_APP_URL;
     const navigate = useNavigate();
-    const [errorMessages, setErrorMessage] = useState([]);
-    const { showFlashMessage }  = useOutletContext();
+    const { showFlashMessage, token }  = useOutletContext();
 
     const roles = [
         { value: 'staff', option: 'Staff'},
@@ -30,6 +29,11 @@ const CreateUser = () => {
         validationSchema: UserSignupSchema,
         onSubmit: (values) => {
             axios.post(`${baseUrl}:${PORT}/user-create`, values,
+                {
+                    headers: {
+                        Authorization: token,
+                    }
+                },
                 {   
                     'Content-Type': 'application/json',
                 }
@@ -46,13 +50,6 @@ const CreateUser = () => {
         }
         
     });
-
-    const getErrorMessage = (value) => {
-        const error = errorMessages.filter((error)=>{
-            return error.path[0] === value;
-        })
-        return error;
-    } 
 
     return (
         <div className='w-full flex justify-start'>
