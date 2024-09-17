@@ -1,6 +1,37 @@
 import React from "react";
+import { useFormik } from 'formik';
+import { useNavigate, useOutletContext } from "react-router-dom";
+import axios from 'axios';
 
 const Login = () => {
+  const PORT = import.meta.env.VITE_PORT;
+  const baseUrl = import.meta.env.VITE_APP_URL;
+  const navigate = useNavigate();
+  // const { showFlashMessage }  = useOutletContext();
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: ''
+    },
+    onSubmit: (values) => {
+      axios.post(`${baseUrl}:${PORT}/login`, values,
+        {   
+            'Content-Type': 'application/json',
+        }
+    ).then((res)=>{ 
+        console.log(res);
+        const { token } = res.data; 
+        localStorage.setItem('token', token);
+        navigate('/users');
+        
+    }).catch((err)=>{
+        // const {message, type} = err.response.data;
+        // showFlashMessage(message,type); 
+    })
+    }
+  });
+
   return (
     <div className="w-full flex justify-center h-screen bg-slate-700">
       <div className=" border w-2/6 p-10 m-32 h-2/4 shadow-lg bg-white rounded ">
@@ -8,22 +39,22 @@ const Login = () => {
           <h1 className="font-bold text-4xl">Login</h1>
           <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
         </div>
-        <form action="">
+        <form onSubmit={formik.handleSubmit}>
           <div className="flex flex-col px-2 w-full justify-center ">
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
                 Username
               </label>
-              <input className="shadow appearance-none border rounded w-full h-12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="username" />
+              <input value={formik.values.username} onChange={formik.handleChange} className="shadow appearance-none border rounded w-full h-12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="username" />
             </div>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                 Password
               </label>
-              <input className="shadow appearance-none border rounded w-full h-12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" id="username" />
+              <input value={formik.values.password} onChange={formik.handleChange} className="shadow appearance-none border rounded w-full h-12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" id="password" />
             </div>
             <div>
-              <button className="uppercase bg-blue-700 font-light text-2xl py-2 rounded  text-white w-full">Login</button>
+              <button type="submit" className="uppercase bg-blue-700 font-light text-2xl py-2 rounded  text-white w-full">Login</button>
             </div>
           </div>
         </form>

@@ -24,10 +24,13 @@ const Users = () => {
 
     useEffect(() => {
         axios.get(`${baseUrl}:${PORT}/users`,{
+            headers: {
+                Authentication: localStorage.getItem('token')
+            },
             params: {
                 name: formik.values.name,
                 role: formik.values.role
-            }
+            },
         })
             .then((res) => {
                 setUsers(res.data);
