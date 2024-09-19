@@ -31,7 +31,7 @@ const CreateUser = () => {
             axios.post(`${baseUrl}:${PORT}/user-create`, values,
                 {
                     headers: {
-                        Authorization: token,
+                        Authorization: `Bearer ${token}`,
                     }
                 },
                 {   

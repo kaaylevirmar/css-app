@@ -24,10 +24,8 @@ const Login = () => {
         const { token, role } = res.data; 
         localStorage.setItem('token', token);
         localStorage.setItem('role', role);
-        
-        if(token){
-          navigate('/dashboard');
-        }
+
+        window.location.href = "/dashboard";
         
     }).catch((err)=>{
       console.log(err);

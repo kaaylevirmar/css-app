@@ -15,7 +15,7 @@ const ShowUser = () => {
             await axios.get(`${baseUrl}:${PORT}/user/${id}`, 
                 {
                     headers: {
-                        Authorization: token,
+                        Authorization: `Bearer ${token}`,
                     }
                 },
             )

@@ -27,7 +27,7 @@ const Users = () => {
     useEffect(() => {
         axios.get(`${baseUrl}:${PORT}/users`,{
             headers: {
-                Authorization: token,
+                Authorization: `Bearer ${token}`,
             },
             params: {
                 name: formik.values.name,
