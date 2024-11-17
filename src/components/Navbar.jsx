@@ -6,7 +6,8 @@ import { FaCircleUser } from "react-icons/fa6";
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
-
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
 
   return (
     <div className='w-72 py-10 h-screen bg-slate-700 text-white flex flex-col justify-between'>
@@ -19,11 +20,12 @@ const Navbar = () => {
         <hr  className='h-0.5 bg-slate-500 w-64 rounded-md'/>
       </div>
         <div className='hover:scale-105 hover:cursor-pointer inline-flex items-center gap-1 pl-12'>
-          <span><MdMenuBook size={25} /></span>Dashboard
+          <span><MdMenuBook size={25} /></span><Link to="/dashboard">Dashboard</Link>
         </div>
-        <div className='hover:scale-105 hover:cursor-pointer inline-flex items-center gap-1 pl-12'>
+        {token && role === 'admin' && <div className='hover:scale-105 hover:cursor-pointer inline-flex items-center gap-1 pl-12'>
           <span><FaUser size={25} /></span><Link to="/users">Users</Link>
-        </div>
+        </div> }
+
         <div className='hover:scale-105 hover:cursor-pointer inline-flex items-center gap-1 pl-12'>
           <span><GrSchedule size={25} /></span>Schedule
         </div>

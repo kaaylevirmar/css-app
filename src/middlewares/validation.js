@@ -8,3 +8,8 @@ export const UserSignupSchema = Yup.object().shape({
     password: Yup.string().required('Password is required!'),
     role: Yup.string().required('Role is required!')
 });
+
+export const UserLoginValidation = Yup.object().shape({
+    username: Yup.string().min(2, 'too short!').max(20, 'too long').required('Username is required!'),
+    password: Yup.string().required('Password is required!'),
+})

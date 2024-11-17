@@ -59,6 +59,11 @@ const EditUser = () => {
 
         await axios.put(`${baseUrl}:${PORT}/user/${id}/update`, formData,
             {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            },
+            {
                 'Content-Type': 'application/json',
             }
         )
